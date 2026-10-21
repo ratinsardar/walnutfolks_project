@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Transaction Status</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; color: #202124; }
+        form { display: flex; gap: 10px; }
+        input { flex: 1; padding: 10px; border: 1px solid #bbb; border-radius: 4px; }
+        button { padding: 11px; background: #1769aa; color: white; border: 0; border-radius: 4px; cursor: pointer; }
+        pre { background: #f1f3f4; padding: 16px; overflow: auto; }
+        a { margin-right: 14px; }
+    </style>
+</head>
+<body>
+    <nav><a href="/trigger">Trigger webhook</a><a href="/health">Health check</a></nav>
+    <h1>Transaction Status</h1>
+    <p>Enter a transaction ID to check its current status.</p>
+    <form id="status-form">
+        <input id="transaction-id" placeholder="txn_abc123def456" required>
+        <button type="submit">Check status</button>
+    </form>
+    <pre id="result">Enter a transaction ID above.</pre>
+    <script>
+        document.getElementById('status-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const transactionId = document.getElementById('transaction-id').value;
+            const response = await fetch(`/v1/transactions/${encodeURIComponent(transactionId)}`);
+            document.getElementById('result').textContent = `HTTP ${response.status}\n${JSON.stringify(await response.json(), null, 2)}`;
+        });
+    </script>
+</body>
+</html>
+
